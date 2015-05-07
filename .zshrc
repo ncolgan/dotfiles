@@ -91,7 +91,10 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 export PATH="./bin:$HOME/bin:$PATH"
 export GOPATH=$HOME/Projects/go
 export PATH=$PATH:$GOPATH/bin
-export PATH=$PATH:$(go env GOROOT)/bin
+
+if type go > /dev/null; then
+  export PATH=$PATH:$(go env GOROOT)/bin
+fi
 
 export EDITOR=vim
 
