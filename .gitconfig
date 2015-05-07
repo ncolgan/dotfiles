@@ -1,0 +1,75 @@
+[user]
+	name = Nick Colgan
+	email = nick.colgan@code42.com
+[pager]
+  grep = false
+[core]
+	excludesfile = /Users/nick.colgan/.gitignore_global
+	quotepath = false
+	pager = less -x2
+[color]
+  branch = auto
+  diff = auto
+  interactive = auto
+  status = auto
+  grep = auto
+  ui = true
+[alias]
+  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+  c = commit -m
+  a = add
+  aa = !git add -u && git add . && git status
+  co = checkout
+  cob = checkout -b
+  up = !git fetch origin && git rebase origin/master
+  ir = !git rebase -i origin/master
+  cos = !git-cos
+  cors = !git-cors
+  dc = diff --cached
+  amend = commit --amend -C HEAD
+  rename-branch = !git branch -m `git rev-parse --abbrev-ref HEAD`
+  changelog = log --no-merges --date=short --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)%Creset'
+  current = rev-parse --abbrev-ref HEAD
+  todo = grep -n -e TODO -e FIXME -e XXX -e OPTIMIZE -I
+	d = difftool
+  undo = !git reset --hard
+  undoclean = !git reset --hard && git clean -fd
+  uncommit = !git reset --soft HEAD^
+  unadd = !git reset HEAD
+  unstage = !git reset HEAD
+	create-pull-request = !sh -c 'stash pull-request $0'
+	coj = !zsh -c git cob ncolgan/$(find-jira)
+[push]
+	default = current
+[github]
+	user = nick.colgan@gmail.com
+  password = !security find-internet-password -a "nick.colgan@gmail.com" -s github.com -w | tr -d '\n'
+[gist]
+  private = true
+[mergetool]
+	prompt = false
+	keepBackup = false
+[merge]
+	tool = diffmerge
+[difftool "diffmerge"]
+	cmd = diffmerge \"$LOCAL\" \"$REMOTE\"
+[mergetool "diffmerge"]
+	cmd = "diffmerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$(if test -f \"$BASE\"; then echo \"$BASE\"; else echo \"$LOCAL\"; fi)\" \"$REMOTE\""
+	trustExitCode = true
+[diff]
+	tool = vimdiff
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
+[filter "hawser"]
+	clean = git hawser clean %f
+	smudge = git hawser smudge %f
+	required = true
+[credential]
+	helper = osxkeychain
