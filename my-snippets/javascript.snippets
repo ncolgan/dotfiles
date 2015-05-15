@@ -1,0 +1,35 @@
+snippet req "require" b
+var $1 = require('${2:$1}');$0
+endsnippet
+
+snippet :f "Object Method"
+${1:method_name}: function(${3}) {
+	${VISUAL}$0
+}${10:,}
+endsnippet
+
+snippet vf "Function assigned to var"
+var ${1:function_name} = function(${2}) {
+	${VISUAL}$0
+};$3
+endsnippet
+
+snippet cl "console.log" b
+console.log(${1:"${2:value}"});
+endsnippet
+
+snippet ce "console.error" b
+console.error(${1:"${2:value}"});
+endsnippet
+
+snippet ca "console.assert" b
+console.assert(${1:assertion}, ${2:"${3:message}"});
+endsnippet
+
+snippet ctrace "console.trace" b
+console.trace();
+endsnippet
+
+snippet : "Object key key: 'value'"
+${1:key}: ${2:"${3:value}"}${4:, }
+endsnippet

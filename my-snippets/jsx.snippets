@@ -1,0 +1,54 @@
+snippet gis "get initial state" b
+getInitialState: function() {
+	return {
+		${1}: ${2}
+	};
+},$0
+endsnippet
+
+snippet rcc "create class/component" b
+var React = require('react');
+var ${1:ClassName} = React.createClass({
+
+	render: function() {
+		return (
+			${VISUAL}$2
+		);
+	}
+
+});
+$0
+module.exports = $1;
+endsnippet
+
+snippet gdp "get default props" b
+getDefaultProps: function() {
+	return {
+		${1}
+	};
+},$0
+endsnippet
+
+snippet pt "propTypes" b
+propTypes: {
+	${1}: React.PropTypes.${2:string}
+},
+endsnippet
+
+snippet props "get property" i
+this.props.${1}
+endsnippet
+
+snippet state "get state" i
+this.state.${1}
+endsnippet
+
+snippet trp "transfer props to" b
+this.transferPropsTo(${VISUAL}$0);
+endsnippet
+
+snippet cdm "component did mount" b
+componentDidMount: function() {
+	$1
+}$0
+endsnippet

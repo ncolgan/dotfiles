@@ -1,0 +1,14 @@
+snippet cpro "property_name: function() {...}.property(),"
+${1:property_name}: function() {
+	${3://body...}
+}.property('${2:argumenet}')${4:,}
+endsnippet
+
+# Ember getter and setter
+snippet eget "this.get('property');"
+${3}${1:this}.get('${2:property}');
+endsnippet
+
+snippet eset "this.set('property', value);"
+${1:this}.set('${2:property}', ${3:value});
+endsnippet
