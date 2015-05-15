@@ -1,10 +1,9 @@
 [user]
 	name = Nick Colgan
-	email = nick.colgan@code42.com
 [pager]
   grep = false
 [core]
-	excludesfile = /Users/nick.colgan/.gitignore_global
+	excludesfile = ~/.gitignore_global
 	quotepath = false
 	pager = less -x2
 [color]
@@ -43,7 +42,6 @@
 	default = current
 [github]
 	user = nick.colgan@gmail.com
-  password = !security find-internet-password -a "nick.colgan@gmail.com" -s github.com -w | tr -d '\n'
 [gist]
   private = true
 [mergetool]
@@ -71,5 +69,5 @@
 	clean = git hawser clean %f
 	smudge = git hawser smudge %f
 	required = true
-[credential]
-	helper = osxkeychain
+[include]
+  path = ~/.gitconfig.local
