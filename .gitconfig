@@ -14,6 +14,7 @@
   grep = auto
   ui = true
 [alias]
+  l = log --graph --oneline
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
   c = commit -m
   a = add
@@ -38,6 +39,9 @@
   unstage = !git reset HEAD
 	create-pull-request = !sh -c 'stash pull-request $0'
 	coj = !zsh -c git cob ncolgan/$(find-jira)
+  publish = !git push -u origin $(git branch-name)
+  unpublish = !git push origin :$(git branch-name)
+  rbi = !git rebase -i @{u}
 [push]
 	default = current
 [github]
@@ -47,8 +51,11 @@
 [mergetool]
 	prompt = false
 	keepBackup = false
+[mergetool "splice"]
+  cmd = "vim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
+  trustExitCode = true
 [merge]
-	tool = diffmerge
+	tool = splice
 [difftool "diffmerge"]
 	cmd = diffmerge \"$LOCAL\" \"$REMOTE\"
 [mergetool "diffmerge"]
@@ -58,7 +65,7 @@
 	tool = vimdiff
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path =
+	path = 
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true

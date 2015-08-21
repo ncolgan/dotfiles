@@ -35,7 +35,7 @@ DEFAULT_USER="nick.colgan"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git ruby rails bundler cap common-aliases gem git-extras npm rvm sudo)
+plugins=(git ruby rails bundler cap common-aliases gem git-extras npm rvm sudo dircycle dirhistory jira)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -109,6 +109,9 @@ function git_diff() {
 
 stash-team() { stash pull-request $1 "@tom.rogers" "@daniel.olson" "@michael.sampson" "@mark.nutter" }
 cpr() { stash pull-request $1 $(cat ~/bin/stash-users.txt | fzf -m) $2 -o }
-jira-issues() { curl -k -s -G -u nick.colgan:f34F1mdWjRMi -H 'Content-Type: application/json' --data-urlencode "jql=assignee=nick.colgan and status in (Open, Started)" "https://jira.corp.code42.com/rest/api/2/search" 2>&1 | json | jq -r ".issues[] | [.key,.fields.summary] | join(\" - \")" }
-find-jira() { echo $(jira-issues | fzf) | sed "s/\ -\ .*//" }
-new-jira-branch() { git cob ncolgan/$(find-jira) }
+jira-issues() { curl -k -s -G -u nick.colgan:D#5R3Hvje -H 'Content-Type: application/json' --data-urlencode "jql=assignee=nick.colgan and status in (Open, Started)" "https://jira.corp.code42.com/rest/api/2/search" 2>&1 | json | jq -r ".issues[] | [.key,.fields.summary] | join(\" - \")" }
+find-jira() { echo $(jira-issues | fzf) | perl -pe "s/^(PL-[0-9]*) - (.*)$/ncolgan\/\1\/\L\2/i; s/[^\w \/\n]/-/g; s/[- ]+/-/g; s/\/PL([0-9]*)\//\/PL-\1\//" | perl -pe 'lc'}
+new-jira-branch() { git cob $(find-jira) }
+
+[ -f ~/.nvm/nvm.sh ] && source ~/.nvm/nvm.sh
+[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn

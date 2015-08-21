@@ -72,7 +72,7 @@ Plug 'mustache/vim-mustache-handlebars'
 " Bundle 'rizzatti/dash.vim'
 Plug 'gregsexton/MatchTag'
 Plug 'chrisbra/csv.vim'
-Plug 'elzr/vim-json'
+" Plug 'elzr/vim-json'
 " Plug 'jelera/vim-javascript-syntax'
 Plug 'tpope/vim-cucumber'
 Plug 'fatih/vim-go'
@@ -87,7 +87,9 @@ Plug 'kshenoy/vim-signature'
 " Plug 'neowit/vim-force.com'
 Plug 'derekwyatt/vim-scala'
 " Plug 'lukaszb/vim-web-indent'
-Plug 'pangloss/vim-javascript'
+"
+Plug 'pangloss/vim-javascript' | Plug 'mxw/vim-jsx'
+
 Plug 'amiorin/vim-project'
 Plug 'tpope/vim-eunuch'
 Plug 'editorconfig/editorconfig-vim'
@@ -105,7 +107,18 @@ Plug 'osyo-manga/vim-over'
 " Plug 'gregsexton/gitv'
 " Plug 'sjl/splice.vim'
 " Plug 'jistr/vim-nerdtree-tabs'
-Plug 'mxw/vim-jsx'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'gregsexton/gitv'
+Plug 'junegunn/vim-easy-align'
+Plug 'idanarye/vim-merginal'
+Plug 'sjl/splice.vim'
+Plug 'tpope/vim-bundler'
+if has('nvim')
+  Plug 'benekastah/neomake'
+end
+Plug 'exu/pgsql.vim'
+Plug 'tpope/vim-tbone'
+Plug 'ivalkeen/vim-simpledb'
 
 set ts=2
 
@@ -145,15 +158,13 @@ let g:UltiSnipsListSnippets="<c-j>"
 let g:sparkupExecuteMapping='<c-y>,'
 let g:sparkupNextMapping='<c-y>n'
 
-
-
 let g:rails_ctags_arguments="--exclude=tmp --exclude=vendor"
 
 let g:ctrlp_extensions = ['tag']
 
 let g:session_autosave = 'no'
 
-let g:syntastic_javascript_checkers = ['jsxhint']
+let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_javascript_jsxhint_options = '--babel'
 let g:syntastic_javascript_jshint_options = '--config ~/.config/jshint.json'
 let g:ack_default_options = ' -H --nocolor --nogroup --column'
@@ -224,17 +235,6 @@ endif
 " align cucumber tables
 inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
-function! s:align()
-  let p = '^\s*|\s.*\s|\s*$'
-  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-    Tabularize/|/l1
-    normal! 0
-    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-  endif
-endfunction
-
 function! NumberToggle()
   if(&relativenumber == 1)
     set number
@@ -259,7 +259,6 @@ command! Welcome call project#config#welcome()
 
 au BufNewFile,BufRead Gemfile set filetype=Gemfile.ruby
 au BufNewFile,BufRead [Gg]ulpfile.js set filetype=gulp.javascript
-au BufNewFile,BufRead *.jsx set filetype=jsx.javascript
 au BufNewFile,BufRead *.ex set filetype=elixir
 au BufNewFile,BufRead *.exs set filetype=elixir
 au BufNewFile,BufRead *.md set filetype=markdown
@@ -269,7 +268,7 @@ au BufNewFile,BufRead *.go set filetype=go
 au BufNewFile,BufRead *.hbs runtime! ftplugin/html.vim
 au BufNewFile,BufRead Vagrantfile set filetype=ruby
 " automatically delete trailing whitespace on save
-au BufWritePre * :%s/\s\+$//e
+" au BufWritePre * :%s/\s\+$//e
 au BufWritePost .vimrc source $MYVIMRC
 
 au FileType go nmap <Leader>s <Plug>(go-implements)
@@ -304,3 +303,9 @@ set exrc
 set secure
 
 nnoremap    <F2> :<C-U>setlocal lcs=tab:▶\ ,trail:-,eol:$ list! list? <CR>
+
+vmap <C-c><C-c> <Plug>SendSelectionToTmux
+nmap <C-c><C-c> <Plug>NormalModeSendToTmux
+nmap <C-c>r <Plug>SetTmuxVars
+
+iunmap \|
