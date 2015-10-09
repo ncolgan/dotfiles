@@ -107,9 +107,8 @@ function git_diff() {
   git diff --no-ext-diff -w "$@" | vim -R -
 }
 
-stash-team() { stash pull-request $1 "@tom.rogers" "@daniel.olson" "@michael.sampson" "@mark.nutter" }
 cpr() { stash pull-request $1 $(cat ~/bin/stash-users.txt | fzf -m) $2 -o }
-jira-issues() { curl -k -s -G -u nick.colgan:D#5R3Hvje -H 'Content-Type: application/json' --data-urlencode "jql=assignee=nick.colgan and status in (Open, Started)" "https://jira.corp.code42.com/rest/api/2/search" 2>&1 | json | jq -r ".issues[] | [.key,.fields.summary] | join(\" - \")" }
+jira-issues() { curl -k -s -G -u nick.colgan:0Z10MmGbWcBn -H 'Content-Type: application/json' --data-urlencode "jql=assignee=nick.colgan and status in (Open, Started)" "https://jira.corp.code42.com/rest/api/2/search" 2>&1 | json | jq -r ".issues[] | [.key,.fields.summary] | join(\" - \")" }
 find-jira() { echo $(jira-issues | fzf) | perl -pe "s/^(PL-[0-9]*) - (.*)$/ncolgan\/\1\/\L\2/i; s/[^\w \/\n]/-/g; s/[- ]+/-/g; s/\/PL([0-9]*)\//\/PL-\1\//" | perl -pe 'lc'}
 new-jira-branch() { git cob $(find-jira) }
 

@@ -17,10 +17,16 @@ set cursorline
 set nofoldenable
 set showmatch
 set wildignore=node_modules,trash,tmp,cache,coverage,vendor
-set noswapfile
+" set backupdir=~/.vim/backups//
+" set directory=~/.vim/backups//
 set backspace=indent,eol,start
 set autoindent
 set smarttab
+set hidden
+set undofile
+set undodir=$HOME/.vim/undo
+set undolevels=1000
+set undoreload=10000
 
 filetype plugin indent on
 syntax on
@@ -119,6 +125,9 @@ end
 Plug 'exu/pgsql.vim'
 Plug 'tpope/vim-tbone'
 Plug 'ivalkeen/vim-simpledb'
+Plug 'szw/vim-tags'
+Plug 'vim-scripts/groovy.vim'
+Plug 'marijnh/tern_for_vim'
 
 set ts=2
 
@@ -285,6 +294,8 @@ au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>dt <Plug>(go-def-tab)
 au FileType go nmap <Leader>e <Plug>(go-rename)
 
+let g:go_fmt_command = "goimports"
+
 let os = substitute(system('uname'), "\n", "", "")
 if os == "Linux"
   set clipboard=unnamedplus
@@ -303,9 +314,23 @@ set exrc
 set secure
 
 nnoremap    <F2> :<C-U>setlocal lcs=tab:▶\ ,trail:-,eol:$ list! list? <CR>
+set lcs=tab:▶\ ,trail:-,eol:$ 
+set list!
 
 vmap <C-c><C-c> <Plug>SendSelectionToTmux
 nmap <C-c><C-c> <Plug>NormalModeSendToTmux
 nmap <C-c>r <Plug>SetTmuxVars
 
 iunmap \|
+if executable('ag')
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command =
+    \ 'ag %s --files-with-matches -g "" --ignore "\.git$\|\.hg$\|\.svn$"'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+else
+  " Fall back to using git ls-files if Ag is not available
+  let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$'
+  let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others']
+endif
