@@ -113,9 +113,10 @@ function git_diff() {
 }
 
 cpr() { stash pull-request $1 $(cat ~/bin/stash-users.txt | fzf -m) $2 -o }
-jira-issues() { curl -k -s -G -u nick.colgan:0Z10MmGbWcBn -H 'Content-Type: application/json' --data-urlencode "jql=assignee=nick.colgan and status in (Open, Started)" "https://jira.corp.code42.com/rest/api/2/search" 2>&1 | json | jq -r ".issues[] | [.key,.fields.summary] | join(\" - \")" }
+jira-issues() { curl -k -s -G -u nick.colgan:0Z10MmGbWcBn -H 'Content-Type: application/json' --data-urlencode "jql=assignee=nick.colgan and status in (Open, Started)" "https://jira.corp.code42.com/rest/api/2/search" 2>&1 | jq -r ".issues[] | [.key,.fields.summary] | join(\" - \")" }
 find-jira() { echo $(jira-issues | fzf) | perl -pe "s/^(PL-[0-9]*) - (.*)$/ncolgan\/\1\/\L\2/i; s/[^\w \/\n]/-/g; s/[- ]+/-/g; s/\/PL([0-9]*)\//\/PL-\1\//" | perl -pe 'lc'}
 new-jira-branch() { git cob $(find-jira) }
+tar-iml() { find . -name "*.iml" | tar -czf iml.tar.gz -T - }
 
 [ -f ~/.nvm/nvm.sh ] && source ~/.nvm/nvm.sh
 [[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
