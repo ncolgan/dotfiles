@@ -65,6 +65,11 @@ alias vtab='vim -c "lcd %:p:h" -c "NERDTreeCWD" --servername VIM --remote-tab'
 
 alias git-grep-all='git rev-list --all | xargs git grep'
 
+if [[ "$OSTYPE" == 'linux-gnu' ]]; then
+  alias agi="sudo apt-get install -y"
+  alias acs="apt-cache search"
+fi
+
 # alias mvim="open -a MacVim"
 
 mkc () {
