@@ -14,6 +14,7 @@
   grep = auto
   ui = true
 [alias]
+  unmerged = !git diff --name-status --diff-filter=U | cat
   l = log --graph --oneline
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
   c = commit -m
@@ -42,6 +43,7 @@
   publish = !git push -u origin $(git branch-name)
   unpublish = !git push origin :$(git branch-name)
   rbi = !git rebase -i @{u}
+  find = !git ls-files | grep
 [push]
 	default = current
 [github]
@@ -78,3 +80,7 @@
 	required = true
 [include]
   path = ~/.gitconfig.local
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true

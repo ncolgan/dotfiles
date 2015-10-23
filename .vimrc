@@ -24,6 +24,7 @@ set autoindent
 set smarttab
 set hidden
 set undofile
+set noswapfile
 set undodir=$HOME/.vim/undo
 set undolevels=1000
 set undoreload=10000
@@ -128,6 +129,7 @@ Plug 'ivalkeen/vim-simpledb'
 Plug 'szw/vim-tags'
 Plug 'vim-scripts/groovy.vim'
 Plug 'marijnh/tern_for_vim'
+Plug 'tpope/vim-unimpaired'
 
 set ts=2
 
@@ -174,8 +176,6 @@ let g:ctrlp_extensions = ['tag']
 let g:session_autosave = 'no'
 
 let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_javascript_jsxhint_options = '--babel'
-let g:syntastic_javascript_jshint_options = '--config ~/.config/jshint.json'
 let g:ack_default_options = ' -H --nocolor --nogroup --column'
 
 set t_Co=256
