@@ -134,6 +134,8 @@ Plug 'vim-scripts/groovy.vim'
 Plug 'marijnh/tern_for_vim'
 Plug 'tpope/vim-unimpaired'
 Plug 'jreybert/vimagit'
+" Plug 'tfnico/vim-gradle'
+" Plug 'vim-scripts/groovy.vim'
 
 set ts=2
 
@@ -164,9 +166,8 @@ let g:ctrlp_max_files = 10000
 let g:ctrlp_max_depth = 100
 
 let g:ctrlp_root_markers = ['package.json']
-
-let g:UltiSnipsSnippetsDir = "/Users/nick.colgan/.vim/my-snippets/"
-let g:UltiSnipsSnippetDirectories = [ "/Users/nick.colgan/.vim/my-snippets/" ]
+let g:UltiSnipsSnippetsDir = expand("$HOME/.vim/my-snippets/")
+let g:UltiSnipsSnippetDirectories = [ expand("$HOME/.vim/my-snippets/") ]
 
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
@@ -331,13 +332,13 @@ nmap <C-c>r <Plug>SetTmuxVars
 iunmap \|
 if executable('ag')
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command =
-    \ 'ag %s --files-with-matches -g "" --ignore "\.git$\|\.hg$\|\.svn$"'
+  " let g:ctrlp_user_command =
+  "   \ 'ag %s --files-with-matches -g "" --ignore "\.git$\|\.hg$\|\.svn$"'
 
   " ag is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 0
 else
   " Fall back to using git ls-files if Ag is not available
   let g:ctrlp_custom_ignore = '\.git$\|\.hg$\|\.svn$'
-  let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others']
+  " let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . --cached --exclude-standard --others']
 endif
