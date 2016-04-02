@@ -41,14 +41,13 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'mileszs/ack.vim'
 Plug 'vim-scripts/closetag.vim'
-Plug 'kien/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'chriskempson/vim-tomorrow-theme'
-" Plug 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim'
 Plug 'rstacruz/sparkup'
 Plug 'sjl/gundo.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'danro/rename.vim'
-Plug 'scrooloose/syntastic'
 " Plug 'godlygeek/tabular'
 Plug 'tpope/vim-fugitive'
 Plug 'bling/vim-airline'
@@ -64,6 +63,8 @@ if has('lua')
   Plug 'SirVer/ultisnips'
   Plug 'Shougo/neocomplete'
 end
+
+Plug 'Shougo/unite.vim'
 " Plug 'iurifq/ctrlp-rails.vim'
 Plug 'vim-scripts/dbext.vim'
 Plug 'kchmck/vim-coffee-script'
@@ -79,7 +80,7 @@ Plug 'mustache/vim-mustache-handlebars'
 " Bundle 'rizzatti/dash.vim'
 Plug 'gregsexton/MatchTag'
 Plug 'chrisbra/csv.vim'
-" Plug 'elzr/vim-json'
+Plug 'elzr/vim-json'
 " Plug 'jelera/vim-javascript-syntax'
 Plug 'tpope/vim-cucumber'
 Plug 'fatih/vim-go'
@@ -122,6 +123,8 @@ Plug 'sjl/splice.vim'
 Plug 'tpope/vim-bundler'
 if has('nvim')
   Plug 'benekastah/neomake'
+else
+  Plug 'scrooloose/syntastic'
 end
 Plug 'exu/pgsql.vim'
 Plug 'tpope/vim-tbone'
@@ -130,6 +133,7 @@ Plug 'szw/vim-tags'
 Plug 'vim-scripts/groovy.vim'
 Plug 'marijnh/tern_for_vim'
 Plug 'tpope/vim-unimpaired'
+Plug 'jreybert/vimagit'
 
 set ts=2
 
@@ -137,8 +141,9 @@ let g:project_use_nerdtree = 1
 call project#rc("~/Projects")
 
 Project "shareplan"
-Project "console"
-Project "core"
+Project "~/Projects/core/web/src/console"
+Project "~/Projects/core/web/src/legal_hold"
+" Project "core"
 Project "edge_case"
 Project "unified-login"
 Project "legacy-client"
@@ -157,6 +162,8 @@ call plug#end()
 
 let g:ctrlp_max_files = 10000
 let g:ctrlp_max_depth = 100
+
+let g:ctrlp_root_markers = ['package.json']
 
 let g:UltiSnipsSnippetsDir = "/Users/nick.colgan/.vim/my-snippets/"
 let g:UltiSnipsSnippetDirectories = [ "/Users/nick.colgan/.vim/my-snippets/" ]
