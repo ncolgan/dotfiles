@@ -1,73 +1,98 @@
 [user]
 	name = Nick Colgan
+	email = nick.colgan@gmail.com
 [pager]
-  grep = false
+	grep = false
+	diff = diff-so-fancy | less --tabs=1,5 -RFX
+	show = diff-so-fancy | less --tabs=1,5 -RFX
 [core]
-	excludesfile = ~/.gitignore_global
+	excludesfile = /Users/nickcolgan/.gitignore_global
 	quotepath = false
 	pager = less -x2
+	editor = vim
+	attributesfile = /Users/nickcolgan/.gitattributes
 [color]
-  branch = auto
-  diff = auto
-  interactive = auto
-  status = auto
-  grep = auto
-  ui = true
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+	grep = auto
+	ui = true
 [alias]
-  unmerged = !git diff --name-status --diff-filter=U | cat
-  l = log --graph --oneline
-  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
-  c = commit -m
-  a = add
-  aa = !git add -u && git add . && git status
-  co = checkout
-  cob = checkout -b
-  up = !git fetch origin && git rebase origin/master
-  ir = !git rebase -i origin/master
-  cos = !git-cos
-  cors = !git-cors
-  dc = diff --cached
-  amend = commit --amend -C HEAD
-  rename-branch = !git branch -m `git rev-parse --abbrev-ref HEAD`
-  changelog = log --no-merges --date=short --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)%Creset'
-  current = rev-parse --abbrev-ref HEAD
-  todo = grep -n -e TODO -e FIXME -e XXX -e OPTIMIZE -I
+	unmerged = !git diff --name-status --diff-filter=U | cat
+	l = log --graph --oneline
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+	c = commit -m
+	a = add
+	aa = !git add -u && git add . && git status
+	co = checkout
+	cob = checkout -b
+	up = !git fetch origin && git rebase origin/master
+	ir = !git rebase -i origin/master
+	cos = !git-cos
+	cors = !git-cors
+	dc = diff --cached
+	amend = commit --amend -C HEAD
+	rename-branch = !git branch -m `git rev-parse --abbrev-ref HEAD`
+	changelog = log --no-merges --date=short --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd)%Creset'
+	current = rev-parse --abbrev-ref HEAD
+	todo = grep -n -e TODO -e FIXME -e XXX -e OPTIMIZE -I
 	d = difftool
-  undo = !git reset --hard
-  undoclean = !git reset --hard && git clean -fd
-  uncommit = !git reset --soft HEAD^
-  unadd = !git reset HEAD
-  unstage = !git reset HEAD
+	undo = !git reset --hard
+	undoclean = !git reset --hard && git clean -fd
+	uncommit = !git reset --soft HEAD^
+	unadd = !git reset HEAD
+	unstage = reset HEAD --
 	create-pull-request = !sh -c 'stash pull-request $0'
 	coj = !zsh -c git cob ncolgan/$(find-jira)
-  publish = !git push -u origin $(git branch-name)
-  unpublish = !git push origin :$(git branch-name)
-  rbi = !git rebase -i @{u}
-  find = !git ls-files | grep
+	publish = !git push -u origin $(git branch-name)
+	unpublish = !git push origin :$(git branch-name)
+	rbi = !git rebase -i @{u}
+	find = !git ls-files | grep
+	dsf = "!f() { [ -z \"$GIT_PREFIX\" ] || cd \"$GIT_PREFIX\" && git diff --color \"$@\" | diff-so-fancy  | less --tabs=4 -RFX; }; f"
+	conflicted = !nvim +Conflicted
+	stash-untracked = "!f() {    \
+		git stash;               \
+		git stash -u;            \
+		git stash pop stash@{1}; \
+		}; f"
+	up = pull --rebase
+
 [push]
 	default = current
 [github]
 	user = nick.colgan@gmail.com
 [gist]
-  private = true
+	private = true
 [mergetool]
 	prompt = false
 	keepBackup = false
 [mergetool "splice"]
-  cmd = "vim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'"
-  trustExitCode = true
+	cmd = vim -f $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'
+	trustExitCode = true
+[difftool "meld"]
+	cmd = meld $LOCAL $REMOTE
+[difftool "json"]
+	cmd = json-diff $LOCAL $REMOTE
 [merge]
 	tool = splice
 [difftool "diffmerge"]
 	cmd = diffmerge \"$LOCAL\" \"$REMOTE\"
+[difftool "Kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
 [mergetool "diffmerge"]
 	cmd = "diffmerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$(if test -f \"$BASE\"; then echo \"$BASE\"; else echo \"$LOCAL\"; fi)\" \"$REMOTE\""
 	trustExitCode = true
 [diff]
-	tool = vimdiff
+	tool = kdiff3
+	guitool = kdiff3
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+	path =
 [mergetool "sourcetree"]
 	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
@@ -79,8 +104,19 @@
 	smudge = git hawser smudge %f
 	required = true
 [include]
-  path = ~/.gitconfig.local
+	path = ~/.gitconfig.local
 [filter "lfs"]
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge %f
 	required = true
+[credential]
+	helper = osxkeychain
+[gc]
+	autoDetach = false
+[mergetool "kdiff3"]
+	path = /Applications/kdiff3.app/Contents/MacOS/kdiff3
+[pull]
+	ff = only
+[merge "npm-merge-driver"]
+	name = automatically merge npm lockfiles
+	driver = npx npm-merge-driver merge %A %O %B %P

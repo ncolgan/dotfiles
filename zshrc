@@ -1,3 +1,5 @@
+[[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
+
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
@@ -5,7 +7,7 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="robbyrussell"
+ZSH_THEME="powerlevel9k/powerlevel9k"
 # ZSH_THEME="ncolgan"
 
 DEFAULT_USER="nick.colgan"
@@ -35,7 +37,7 @@ DEFAULT_USER="nick.colgan"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git ruby rails bundler cap common-aliases gem git-extras npm rvm sudo dircycle dirhistory jira)
+plugins=(git ruby rails bundler cap common-aliases gem git-extras npm rvm sudo dircycle dirhistory jira emacs)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -56,7 +58,7 @@ alias rc="rails c --sandbox"
 
 alias rmswap="find . -name '*.swp' -delete"
 
-alias tmux="TERM=screen-256color-bce tmux"
+# alias tmux="TERM=screen-256color-bce tmux"
 
 alias bx="bundle exec"
 alias rtags="ctags -R --exclude=tmp --exclude=log --exclude=.git ."
@@ -101,11 +103,8 @@ if type go > /dev/null; then
   export PATH=$PATH:$(go env GOROOT)/bin
 fi
 
-export EDITOR=vim
-
 setopt NO_NOMATCH
 
-export DOCKER_HOST=tcp://192.168.59.103:2375
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 function git_diff() {
@@ -119,4 +118,53 @@ new-jira-branch() { git cob $(find-jira) }
 tar-iml() { find . -name "*.iml" | tar -czf iml.tar.gz -T - }
 
 [ -f ~/.nvm/nvm.sh ] && source ~/.nvm/nvm.sh
+autoload -U add-zsh-hook
+load-nvmrc() {
+  if [[ -f .nvmrc && -r .nvmrc ]]; then
+    nvm use
+  fi
+}
+add-zsh-hook chpwd load-nvmrc
+
 [[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
+
+git-cos() {
+  local branches branch
+  branches=$(git branch -vv) &&
+  branch=$(echo "$branches" | fzf +m) &&
+  git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
+}
+
+git-cors() {
+  local branches branch
+  branches=$(git branch --all | grep -v HEAD) &&
+  branch=$(echo "$branches" |
+           fzf-tmux -d $(( 2 + $(wc -l <<< "$branches") )) +m) &&
+  git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+}
+
+
+source ~/.work_aliases
+
+alias e="$EDITOR"
+alias se="sudo $EDITOR"
+alias ec="emacsclient -n"
+export DEFAULT_USER="nickcolgan"
+
+nvm use stable --silent
+
+docker-clean() {
+  docker rm -f $(docker ps -a -q)
+  docker rmi $(docker images -q)
+}
+
+export_ip() {
+  export localhost_ip="$(ifconfig en0 inet | grep "inet " | awk -F'[: ]+' '{ print $2 }')"
+}
+
+start-server() {
+  export_ip
+  docker-compose up inventory-db test-db redis db api-auth mq inventory-api api inventory-worker bell router events
+}
+
+eval "$(fasd --init auto)"
