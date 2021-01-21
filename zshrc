@@ -1,14 +1,15 @@
 [[ $TERM == "dumb" ]] && unsetopt zle && PS1='$ ' && return
 
 # Path to your oh-my-zsh configuration.
-ZSH=$HOME/.oh-my-zsh
+# ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="powerlevel9k/powerlevel9k"
+#ZSH_THEME="powerlevel9k/powerlevel9k"
 # ZSH_THEME="ncolgan"
+# ZSH_THEME='af-magic'
 
 DEFAULT_USER="nick.colgan"
 
@@ -37,9 +38,9 @@ DEFAULT_USER="nick.colgan"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git ruby rails bundler cap common-aliases gem git-extras npm rvm sudo dircycle dirhistory jira emacs)
+plugins=(git ruby rails bundler cap common-aliases gem git-extras npm sudo dircycle dirhistory jira emacs dotenv fasd fzf nmap httpie tmux)
 
-source $ZSH/oh-my-zsh.sh
+# source $ZSH/oh-my-zsh.sh
 
 alias tailf="tail -f"
 alias rspec='nocorrect rspec'
@@ -72,6 +73,9 @@ if [[ "$OSTYPE" == 'linux-gnu' ]]; then
   alias acs="apt-cache search"
 fi
 
+alias sourcetree='open -a SourceTree'
+alias mux=tmuxinator
+
 # alias mvim="open -a MacVim"
 
 mkc () {
@@ -94,7 +98,6 @@ export GROOVY_HOME="/usr/local/opt/groovy/libexec"
 
 test -s "$HOME/.kiex/scripts/kiex" && source "$HOME/.kiex/scripts/kiex"
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 export PATH="./bin:$HOME/bin:$PATH"
 export GOPATH=$HOME/Projects/go
 export PATH=$PATH:$GOPATH/bin
@@ -117,15 +120,6 @@ find-jira() { echo $(jira-issues | fzf) | perl -pe "s/^(PL-[0-9]*) - (.*)$/ncolg
 new-jira-branch() { git cob $(find-jira) }
 tar-iml() { find . -name "*.iml" | tar -czf iml.tar.gz -T - }
 
-[ -f ~/.nvm/nvm.sh ] && source ~/.nvm/nvm.sh
-autoload -U add-zsh-hook
-load-nvmrc() {
-  if [[ -f .nvmrc && -r .nvmrc ]]; then
-    nvm use
-  fi
-}
-add-zsh-hook chpwd load-nvmrc
-
 [[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
 
 git-cos() {
@@ -143,7 +137,6 @@ git-cors() {
   git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
 }
 
-
 source ~/.work_aliases
 
 alias e="$EDITOR"
@@ -151,7 +144,7 @@ alias se="sudo $EDITOR"
 alias ec="emacsclient -n"
 export DEFAULT_USER="nickcolgan"
 
-nvm use stable --silent
+# nvm use stable --silent
 
 docker-clean() {
   docker rm -f $(docker ps -a -q)
@@ -168,3 +161,66 @@ start-server() {
 }
 
 eval "$(fasd --init auto)"
+
+export STRIPE_PUBLIC_KEY="pk_0EFSMTWMJfgNyY2YwUb2szdOLutp6"
+export STRIPE_API_KEY="sk_0EFSV6xNaDfR6IFnsaLZh2QJO08Vo"
+export BOSS_API_KEY="278124104b524dac8c9668fa65f861cc"
+
+alias mbl-test="ssh ec2-user@52.206.79.60"
+alias mbl-prod="ssh ec2-user@23.21.85.75"
+alias bamboo-test="ssh ec2-user@107.22.232.84"
+alias bamboo-prod="ssh ec2-user@54.235.74.118"
+
+alias mbl-prod-db="pgcli -U mbl -W -h mbl-production.cyia8carv4eq.us-east-1.rds.amazonaws.com mbl"
+alias mbl-test-db="pgcli -U mbl -h mbl-test2.cyia8carv4eq.us-east-1.rds.amazonaws.com postgres"
+
+alias bamboo-prod-db="pgcli -U bamboo -h bamboo-db.ciu5k89kaqcn.us-east-1.rds.amazonaws.com bamboo"
+
+alias sudoedit="sudo -e"
+
+export DANGEROUSLY_DISABLE_HOST_CHECK=true
+
+alias preview="fzf --preview 'bat --color \"always\" {}'"
+export FZF_DEFAULT_OPTS="--bind='ctrl-o:execute(nvim {})+abort'"
+
+alias ping='prettyping --nolegend'
+alias cat='bat'
+. ~/code/z/z.sh
+
+[[ -e "$HOME/.fzf-extras/fzf-extras.zsh" ]] \
+  && source "$HOME/.fzf-extras/fzf-extras.zsh"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/nickcolgan/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/nickcolgan/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/nickcolgan/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/nickcolgan/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+export PATH="/usr/local/opt/mysql@5.7/bin:$HOME/bin:$PATH"
+
+autoload -U add-zsh-hook
+autoload -U zargs
+autoload -U ztodo
+autoload -U zmv
+
+export PATH="$HOME/.cargo/bin:$PATH"
+
+source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+
+. $HOME/.asdf/asdf.sh
+
+. $HOME/.asdf/completions/asdf.bash
+
+source ~/.bin/tmuxinator.zsh
+
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+. ~/.asdf/plugins/java/set-java-home.zsh
+
+source ~/.kb_alias
+[[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
+
+killport() { lsof -t -i :"$@" | xargs kill; }
+psport() {
+  lsof -t -i :"$@" | xargs ps -p 
+}
